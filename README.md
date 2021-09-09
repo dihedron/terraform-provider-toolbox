@@ -1,6 +1,6 @@
 # terraform-provider-toolbox
 
-A magical box of tools for your Terraform recipes.
+A magical box full of tools for your Terraform recipes.
 
 ## Building the provider
 
@@ -42,5 +42,5 @@ Run the following:
 $> export TF_LOG_CORE=off
 $> export TF_LOG_PROVIDER=TRACE
 $> cd examples/
-$> cd .. && make install && cd examples && terraform init && terraform apply
+$> cd .. && make install && cd examples && rm -rf .terraform* && terraform init && terraform apply
 ```

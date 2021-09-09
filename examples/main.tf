@@ -9,6 +9,11 @@ terraform {
 
 provider "toolbox" {}
 
+data "toolbox_regex" "re1" {
+  pattern = ".*"
+  input = "abc"
+}
+
 # module "psl" {
 #   source = "./coffee"
 

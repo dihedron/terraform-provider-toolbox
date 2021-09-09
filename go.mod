@@ -2,7 +2,10 @@ module github.com/dihedron/terraform-provider-toolbox
 
 go 1.17
 
-require github.com/hashicorp/terraform-plugin-sdk/v2 v2.7.1
+require (
+	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.7.1
+)
 
 require (
 	github.com/agext/levenshtein v1.2.2 // indirect
@@ -11,7 +14,6 @@ require (
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
-	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320 // indirect
 	github.com/hashicorp/go-hclog v0.15.0 // indirect
 	github.com/hashicorp/go-multierror v1.0.0 // indirect
 	github.com/hashicorp/go-plugin v1.4.1 // indirect
