@@ -90,8 +90,6 @@ func dataSourceCIDRRead(ctx context.Context, d *schema.ResourceData, m interface
 	return diags
 }
 
-// func dataSourceDefaultCIDR() (interface{}, error) {
-
 // 	return []string{"10.0.0.0/8", "192.168.0.1/8", "172.0.0.2/8"}
 // }
 
