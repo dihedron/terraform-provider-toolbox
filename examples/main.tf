@@ -42,14 +42,3 @@ data "toolbox_cidr" "set1" {
 output "cidr_set1" {
    value = data.toolbox_cidr.set1.prefixes
 }
-
-
-# module "psl" {
-#   source = "./coffee"
-
-#   coffee_name = "Packer Spiced Latte"
-# }
-
-# output "psl" {
-#   value = module.psl.coffee
-# }
