@@ -7,7 +7,7 @@
 
 # Test binary, built with `go test -c`
 *.test
-examples/.terraform
+examples/.terraform/
 examples/.terraform.lock.hcl
 examples/terraform.tfstate
 

@@ -9,10 +9,25 @@ terraform {
 
 provider "toolbox" {}
 
-data "toolbox_regex" "re1" {
+data "toolbox_regex" "matched_regex" {
   pattern = ".*"
   input = "abc"
 }
+
+output "matched_regex_result" {
+   value = data.toolbox_regex.matched_regex.matched
+}
+
+data "toolbox_regex" "unmatched_regex" {
+  pattern = "^b.*"
+  input = "abc"
+}
+
+output "unmatched_regex_result" {
+   value = data.toolbox_regex.unmatched_regex.matched
+}
+
+
 
 # module "psl" {
 #   source = "./coffee"

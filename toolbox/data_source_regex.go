@@ -3,6 +3,7 @@ package toolbox
 import (
 	"context"
 	"log"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -18,8 +19,14 @@ func dataSourceRegex() *schema.Resource {
 			"pattern": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				ValidateDiagFunc: func(interface{}, cty.Path) diag.Diagnostics {
+				ValidateDiagFunc: func(value interface{}, key cty.Path) diag.Diagnostics {
 					var diags diag.Diagnostics
+
+					_, err := regexp.Compile(value.(string))
+					if err != nil {
+						return diag.FromErr(err)
+					}
+
 					return diags
 				},
 			},
@@ -53,7 +60,18 @@ func dataSourceRegexRead(ctx context.Context, d *schema.ResourceData, m interfac
 
 	pattern := d.Get("pattern").(string)
 	log.Printf("[INFO] pattern is %q\n", pattern)
-	if err := d.Set("matched", false); err != nil {
+
+	input := d.Get("input").(string)
+	log.Printf("[INFO] input is %q\n", input)
+
+	r, err := regexp.Compile(pattern)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	result := r.MatchString("peach")
+
+	if err := d.Set("matched", result); err != nil {
 		return diag.FromErr(err)
 	}
 
