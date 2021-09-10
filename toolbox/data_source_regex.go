@@ -69,7 +69,8 @@ func dataSourceRegexRead(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(err)
 	}
 
-	result := r.MatchString("peach")
+	result := r.MatchString(input)
+	log.Printf("[INFO] result is %t\n", result)
 
 	if err := d.Set("matched", result); err != nil {
 		return diag.FromErr(err)

@@ -27,6 +27,21 @@ output "unmatched_regex_result" {
    value = data.toolbox_regex.unmatched_regex.matched
 }
 
+data "toolbox_cidr" "set1" {
+  added = [
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16"
+  ]
+
+  subtracted = [ 
+    "10.0.0.0/27"
+  ]
+}
+
+output "cidr_set1" {
+   value = data.toolbox_cidr.set1.prefixes
+}
 
 
 # module "psl" {
