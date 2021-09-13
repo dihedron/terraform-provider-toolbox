@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.7.1
+	inet.af/netaddr v0.0.0-20210903134321-85fa6c94624e
 )
 
 require (
@@ -41,5 +42,4 @@ require (
 	google.golang.org/genproto v0.0.0-20200711021454-869866162049 // indirect
 	google.golang.org/grpc v1.32.0 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
-	inet.af/netaddr v0.0.0-20210903134321-85fa6c94624e // indirect
 )

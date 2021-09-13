@@ -31,12 +31,12 @@ func dataSourceCIDR() *schema.Resource {
 			"subtracted": {
 				Type:        schema.TypeSet,
 				Description: "A list of prefixes (in CIDR format) to be subtracted from the base IP Set.",
-				Required:    true,
+				Optional:    true,
 				Elem: &schema.Schema{
 					Type:             schema.TypeString,
 					ValidateDiagFunc: validateCIDR,
 				},
-				MinItems: 1,
+				// MinItems: 1,
 			},
 			"prefixes": {
 				Type: schema.TypeSet,

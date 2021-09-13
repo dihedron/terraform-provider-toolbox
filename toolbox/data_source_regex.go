@@ -41,15 +41,21 @@ func dataSourceRegex() *schema.Resource {
 			// "matches": &schema.Schema{
 			// 	Type:     schema.TypeList,
 			// 	Computed: true,
-			// 	Elem: &schema.Resource{
-			// 		Schema: map[string]*schema.Schema{
-			// 			"ingredient_id": &schema.Schema{
-			// 				Type:     schema.TypeInt,
-			// 				Computed: true,
-			// 			},
-			// 		},
+			// 	Elem:     &schema.Schema{
+			// 		Type: schema.TypeString,
 			// 	},
 			// },
+			"matches": &schema.Schema{
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeList,
+					// Computed: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+			},
 		},
 	}
 }
@@ -69,10 +75,27 @@ func dataSourceRegexRead(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(err)
 	}
 
-	result := r.MatchString(input)
-	log.Printf("[INFO] result is %t\n", result)
+	groups := r.FindAllStringSubmatch(input, -1)
+	log.Printf("[INFO] result is %v (%T)\n", groups, groups)
 
-	if err := d.Set("matched", result); err != nil {
+	matched := groups != nil
+
+	if err := d.Set("matched", matched); err != nil {
+		return diag.FromErr(err)
+	}
+
+	matches := []interface{}{}
+
+	for _, group := range groups {
+		log.Printf("[INFO] adding group to output set: %v\n", group)
+		submatches := []interface{}{}
+		for _, match := range group {
+			submatches = append(submatches, match)
+		}
+		matches = append(matches, submatches)
+	}
+
+	if err := d.Set("matches", matches); err != nil {
 		return diag.FromErr(err)
 	}
 
