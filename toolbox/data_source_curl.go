@@ -21,6 +21,13 @@ func dataSourceCURL() *schema.Resource {
 				Required:     true,
 				ValidateFunc: validation.IsURLWithScheme([]string{"http", "https"}),
 			},
+			"method": {
+				Type:         schema.TypeString,
+				Description:  "The HTTP verb to use for the request.",
+				Optional:     true,
+				Default:      "GET",
+				ValidateFunc: validation.StringInSlice([]string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"}, true),
+			},
 			"header": {
 				Type:     schema.TypeSet,
 				Optional: true,

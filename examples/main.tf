@@ -70,6 +70,7 @@ provider "toolbox" {
 
 data "toolbox_curl" "curl_get_1" {
   url = "http://www.repubblica.it"
+  method = "GET"
   header {
     name = "Content-Type"
     values = [
