@@ -13,7 +13,7 @@ import (
 
 func dataSourceCIDR() *schema.Resource {
 	return &schema.Resource{
-		Description: "Perform operations on CIDRs.",
+		Description: "Perform prefix set operations (union, symmetric difference) on CIDRs.",
 		Schema: map[string]*schema.Schema{
 			"added": {
 				Type:        schema.TypeSet,
@@ -31,7 +31,7 @@ func dataSourceCIDR() *schema.Resource {
 				Optional:    true,
 				Elem: &schema.Schema{
 					Type:             schema.TypeString,
-					ValidateDiagFunc: validateCIDR,
+					ValidateDiagFunc: validateCIDR, // maybe validation.IsCIDR???
 				},
 			},
 			"prefixes": {

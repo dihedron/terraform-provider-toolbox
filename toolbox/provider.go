@@ -23,9 +23,8 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{},
 		DataSourcesMap: map[string]*schema.Resource{
-			"toolbox_regex":    dataSourceRegex(),
-			"toolbox_cidr":     dataSourceCIDR(),
-			"toolbox_map2json": dataSourceMap2JSON(),
+			"toolbox_cidr": dataSourceCIDR(),
+			"toolbox_curl": dataSourceCURL(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
