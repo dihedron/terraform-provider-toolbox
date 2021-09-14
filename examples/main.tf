@@ -7,8 +7,14 @@ terraform {
   }
 }
 
-provider "toolbox" {}
+provider "toolbox" {
+  loglevel = "trace"
+}
 
+/*
+ * Create a regular expression, then check if it is matched by 
+ * an inputs string, and print out all matches with submatches.
+ */
 data "toolbox_regex" "re1" {
   pattern = "a(x*)b"
   input = "-axxb-ab-"
@@ -23,16 +29,10 @@ output "regex_re1_matches" {
 }
 
 /*
-data "toolbox_regex" "unmatched_regex" {
-  pattern = "^b.*"
-  input = "abc"
-}
-
-output "unmatched_regex_result" {
-   value = data.toolbox_regex.unmatched_regex.matched
-}
-*/
-
+ * Create a set of prefixes and then subtract a prefix; then do the
+ * reverse by adding back the prefix and checking that the prefixes
+ * are coalesced back into the original RFC1918 prefixes.
+ */
 data "toolbox_cidr" "set1" {
   added = [
       "10.0.0.0/8",
@@ -79,3 +79,19 @@ data "toolbox_cidr" "set2" {
 output "cidr_set2" {
    value = data.toolbox_cidr.set2.prefixes
 }
+
+/*
+ * Output an arbitrary map of values as a JSON.
+ */
+
+# data "toolbox_map2json" "json1" {
+#   items = {
+#     name = "John"
+#     age  = 52
+#     married = true 
+#   }
+# }
+
+# output "map2json_json1" {
+#    value = data.toolbox_map2json.json1.json
+# }

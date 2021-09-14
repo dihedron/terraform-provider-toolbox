@@ -38,19 +38,11 @@ func dataSourceRegex() *schema.Resource {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			// "matches": &schema.Schema{
-			// 	Type:     schema.TypeList,
-			// 	Computed: true,
-			// 	Elem:     &schema.Schema{
-			// 		Type: schema.TypeString,
-			// 	},
-			// },
 			"matches": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeList,
-					// Computed: true,
 					Elem: &schema.Schema{
 						Type: schema.TypeString,
 					},

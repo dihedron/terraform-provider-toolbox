@@ -2,7 +2,6 @@ package toolbox
 
 import (
 	"context"
-	"log"
 	"strconv"
 	"time"
 
@@ -15,7 +14,6 @@ import (
 func dataSourceCIDR() *schema.Resource {
 	return &schema.Resource{
 		Description: "Perform operations on CIDRs.",
-
 		Schema: map[string]*schema.Schema{
 			"added": {
 				Type:        schema.TypeSet,
@@ -25,7 +23,6 @@ func dataSourceCIDR() *schema.Resource {
 					Type:             schema.TypeString,
 					ValidateDiagFunc: validateCIDR,
 				},
-				// Default:  []string{"10.0.0.0/8", "192.168.0.1/8", "172.0.0.2/8"}, // default is RFC1918
 				MinItems: 1,
 			},
 			"subtracted": {
@@ -36,7 +33,6 @@ func dataSourceCIDR() *schema.Resource {
 					Type:             schema.TypeString,
 					ValidateDiagFunc: validateCIDR,
 				},
-				// MinItems: 1,
 			},
 			"prefixes": {
 				Type: schema.TypeSet,
@@ -52,35 +48,36 @@ func dataSourceCIDR() *schema.Resource {
 
 func dataSourceCIDRRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
+	config := m.(*configuration)
 
 	var base netaddr.IPSetBuilder
 
 	prefixes := d.Get("added").(*schema.Set)
 	for _, value := range prefixes.List() {
-		log.Printf("[INFO] adding prefix to base: %q\n", value.(string))
+		config.Logger.Debug("adding prefix to base set", "prefix", value.(string))
 		base.AddPrefix(netaddr.MustParseIPPrefix(value.(string)))
 	}
 
 	prefixes = d.Get("subtracted").(*schema.Set)
 	for _, value := range prefixes.List() {
-		log.Printf("[INFO] subtracting prefix from base: %q\n", value.(string))
+		config.Logger.Debug("subtracting prefix from base set", "prefix", value.(string))
 		base.RemovePrefix(netaddr.MustParseIPPrefix(value.(string)))
 	}
 
-	//values := []string{"10.0.0.0/8", "192.168.0.1/8", "172.0.0.2/8"}
 	set, err := base.IPSet()
 	if err != nil {
-		log.Printf("[ERROR] error parsing CIDRs: %v\n", err)
+		config.Logger.Error("error parsing CIDRs", "error", err)
 		return diag.FromErr(err)
 	}
 
 	values := []interface{}{}
 	for _, prefix := range set.Prefixes() {
-		log.Printf("[INFO] adding prefix to output set: %q\n", prefix)
+		config.Logger.Debug("adding prefix to output set", "prefix", prefix)
 		values = append(values, prefix.String())
 	}
 
 	if err := d.Set("prefixes", values); err != nil {
+		config.Logger.Error("error setting prefixes into state", "error", err)
 		return diag.FromErr(err)
 	}
 
@@ -89,9 +86,6 @@ func dataSourceCIDRRead(ctx context.Context, d *schema.ResourceData, m interface
 
 	return diags
 }
-
-// 	return []string{"10.0.0.0/8", "192.168.0.1/8", "172.0.0.2/8"}
-// }
 
 func validateCIDR(value interface{}, key cty.Path) diag.Diagnostics {
 	var diags diag.Diagnostics
