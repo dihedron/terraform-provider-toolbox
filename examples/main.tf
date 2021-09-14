@@ -84,14 +84,14 @@ output "cidr_set2" {
  * Output an arbitrary map of values as a JSON.
  */
 
-# data "toolbox_map2json" "json1" {
-#   items = {
-#     name = "John"
-#     age  = 52
-#     married = true 
-#   }
-# }
+data "toolbox_map2json" "json1" {
+  items = {
+    name = "John"
+    age  = 52
+    married = true 
+  }
+}
 
-# output "map2json_json1" {
-#    value = data.toolbox_map2json.json1.json
-# }
+output "map2json_json1" {
+   value = data.toolbox_map2json.json1.json
+}

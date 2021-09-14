@@ -3,7 +3,6 @@ package toolbox
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"strconv"
 	"time"
 
@@ -13,9 +12,9 @@ import (
 
 func dataSourceMap2JSON() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceRegexRead,
+		Description: "Maps a dictionary into a JSON object.",
 		Schema: map[string]*schema.Schema{
-			"items": &schema.Schema{
+			"items": {
 				Type:     schema.TypeMap,
 				Required: true,
 				// ValidateDiagFunc: func(value interface{}, key cty.Path) diag.Diagnostics {
@@ -29,31 +28,35 @@ func dataSourceMap2JSON() *schema.Resource {
 				// 	return diags
 				// },
 			},
-			"json": &schema.Schema{
+			"json": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},
+		ReadContext: dataSourceMap2JSONRead,
 	}
 }
 
 func dataSourceMap2JSONRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 
 	var diags diag.Diagnostics
+	config := m.(*configuration)
 
 	items := d.Get("items").(map[string]interface{})
 	for k, v := range items {
-		log.Printf("[INFO] item is %v => %v\n", k, v)
+		config.Logger.Debug("new item found", "key", k, "value", v)
 	}
 
-	result, err := json.Marshal(m)
+	result, err := json.Marshal(items)
 	if err != nil {
-		log.Printf("[ERROR] error marshalling output: %v", err)
+		config.Logger.Error("error marshalling output", "error", err)
 		return diag.FromErr(err)
 	}
 
+	config.Logger.Debug("input marshalled to JSON", "value", string(result))
+
 	if err := d.Set("json", string(result)); err != nil {
-		log.Printf("[ERROR] error setting JSON value: %v", err)
+		config.Logger.Error("error setting JSON value in state", "error", err)
 		return diag.FromErr(err)
 	}
 

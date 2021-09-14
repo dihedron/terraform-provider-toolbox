@@ -13,9 +13,9 @@ import (
 
 func dataSourceRegex() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceRegexRead,
+		Description: "Apply a regular expression to a given input.",
 		Schema: map[string]*schema.Schema{
-			"pattern": &schema.Schema{
+			"pattern": {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateDiagFunc: func(value interface{}, key cty.Path) diag.Diagnostics {
@@ -29,15 +29,15 @@ func dataSourceRegex() *schema.Resource {
 					return diags
 				},
 			},
-			"input": &schema.Schema{
+			"input": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"matched": &schema.Schema{
+			"matched": {
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
-			"matches": &schema.Schema{
+			"matches": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
@@ -48,6 +48,7 @@ func dataSourceRegex() *schema.Resource {
 				},
 			},
 		},
+		ReadContext: dataSourceRegexRead,
 	}
 }
 
