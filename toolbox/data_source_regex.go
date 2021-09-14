@@ -2,7 +2,6 @@ package toolbox
 
 import (
 	"context"
-	"log"
 	"regexp"
 	"strconv"
 	"time"
@@ -55,31 +54,34 @@ func dataSourceRegex() *schema.Resource {
 func dataSourceRegexRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 
 	var diags diag.Diagnostics
+	config := m.(*configuration)
 
 	pattern := d.Get("pattern").(string)
-	log.Printf("[INFO] pattern is %q\n", pattern)
+	config.Logger.Debug("applying pattern", "pattern", pattern)
 
 	input := d.Get("input").(string)
-	log.Printf("[INFO] input is %q\n", input)
+	config.Logger.Debug("using input value", "input", input)
 
 	r, err := regexp.Compile(pattern)
 	if err != nil {
+		config.Logger.Error("error compiling regular expression", "error", err)
 		return diag.FromErr(err)
 	}
 
 	groups := r.FindAllStringSubmatch(input, -1)
-	log.Printf("[INFO] result is %v (%T)\n", groups, groups)
+	config.Logger.Debug("regular expression applied", "result", groups)
 
 	matched := groups != nil
 
 	if err := d.Set("matched", matched); err != nil {
+		config.Logger.Error("error setting 'matched' value in state", "error", err)
 		return diag.FromErr(err)
 	}
 
 	matches := []interface{}{}
 
 	for _, group := range groups {
-		log.Printf("[INFO] adding group to output set: %v\n", group)
+		config.Logger.Debug("adding group to output set", "group", group)
 		submatches := []interface{}{}
 		for _, match := range group {
 			submatches = append(submatches, match)
@@ -88,6 +90,7 @@ func dataSourceRegexRead(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	if err := d.Set("matches", matches); err != nil {
+		config.Logger.Error("error setting 'matches' value in state", "error", err)
 		return diag.FromErr(err)
 	}
 
